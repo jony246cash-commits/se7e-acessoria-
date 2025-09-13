@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let mensagem = `Olá, meu nome é ${nome}. Quero agendar o serviço: ${servico} para o dia ${dataFormatada} às ${hora}.`;
         
         // Número do WhatsApp
-        let numero = "5569992720204"; // formato internacional sem +
+        let numero = "5569993993568"; // formato internacional sem +
         
         // Gera o link do WhatsApp
         let url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
