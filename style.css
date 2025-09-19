@@ -122,18 +122,18 @@ nav a:hover {
 /* ===== 🧑‍🤝‍🧑 SEÇÃO CONHEÇA-NOS ===== */
 .conhecanos-section {
     background-color: var(--light-bg);
-    color: var(--text-primary);
+ color: var(--text-primary);
 }
 .conhecanos-section h2 {
-    color: var(--primary-color);
+   color: var(--text-primary);
 }
 
 .apresentacao p {
-    color: var(--text-primary);
+   color: var(--text-primary);
 }
 
 .conhecanos-section h2 {
-    color: var(--accent-color);
+    color: var(--text-primary);
 }
 
 .conhecanos-container {
