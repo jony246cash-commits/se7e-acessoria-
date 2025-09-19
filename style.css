@@ -85,7 +85,8 @@ h2 {
 }
 
 .header-logo {
-    max-width: 150px;
+    max-width: 250px; /* Aumenta o tamanho máximo da logo para que ela não fique minúscula */
+    width: 100%; /* Garante que a imagem preencha o espaço disponível */
     height: auto;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
 }
