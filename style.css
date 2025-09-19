@@ -164,6 +164,7 @@ nav a:hover {
     justify-content: center;
     gap: var(--spacing-md);
     flex-wrap: wrap;
+    text-align: center; /* Centraliza o texto dentro da seção */
 }
 
 .servicos-container h2 {
@@ -265,6 +266,7 @@ nav a:hover {
     flex-wrap: wrap;
     justify-content: center;
     gap: var(--spacing-sm);
+    text-align: center; /* Garante que o texto da seção fique centralizado */
 }
 
 .galeria-container h2 {
@@ -275,11 +277,11 @@ nav a:hover {
 
 .galeria-container img {
     width: 200px;
-    height: auto;
+    height: 200px; /* Definindo altura fixa para evitar deformação */
     cursor: pointer;
     border-radius: 10px;
     transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-    object-fit: cover;
+    object-fit: cover; /* Recorta a imagem para se ajustar ao container */
     border: 2px solid var(--border-light);
 }
 
