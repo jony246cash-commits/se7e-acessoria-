@@ -75,7 +75,7 @@ h2 {
 
 /* ===== ⬆️ HEADER E NAVEGAÇÃO REVISITADOS ===== */
 .main-header {
-    background: var(--text-light);
+    background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
     box-shadow: var(--shadow-light);
     padding: var(--spacing-sm);
     display: flex;
@@ -83,7 +83,6 @@ h2 {
     align-items: center;
     flex-wrap: wrap;
 }
-
 .header-logo {
     max-width: 250px; /* Aumenta o tamanho máximo da logo para que ela não fique minúscula */
     width: 100%; /* Garante que a imagem preencha o espaço disponível */
