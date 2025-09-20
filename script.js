@@ -1,10 +1,9 @@
-
 let currentImageIndex = 0;
 let galleryImages = [];
 
 // Função para abrir o formulário de agendamento
 function abrirFormulario() {
-    document.getElementById('formulario-popup').style.display = 'block';
+    document.getElementById('formulario-popup').style.display = 'flex'; // Usei 'flex' para o popup centralizar, como no CSS
 }
 
 // Função para fechar o formulário de agendamento
@@ -16,10 +15,15 @@ function fecharFormulario() {
 
 // Fechar o popup quando clicar fora dele
 window.onclick = function(event) {
-    var popup = document.getElementById('formulario-popup');
-    if (event.target == popup) {
-        popup.style.display = 'none';
+    var popupForm = document.getElementById('formulario-popup');
+    if (event.target === popupForm) {
+        popupForm.style.display = 'none';
         document.getElementById('agendamentoForm').reset();
+    }
+
+    var popupImage = document.getElementById('popup-imagem');
+    if (event.target === popupImage) {
+        popupImage.style.display = 'none';
     }
 }
 
@@ -41,6 +45,7 @@ function throttle(func, limit) {
 document.addEventListener('keydown', throttle(function(event) {
     if (event.key === 'Escape') {
         fecharFormulario();
+        fecharImagem();
     }
 }, 100));
 
@@ -69,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Formatar a data para o padrão brasileiro
-        let dataFormatada = new Date(data).toLocaleDateString('pt-BR');
+        let dataFormatada = new Date(data.replace(/-/g, '/')).toLocaleDateString('pt-BR');
         
         // Monta a mensagem
         let mensagem = `Olá, meu nome é ${nome}. Quero agendar o serviço: ${servico} para o dia ${dataFormatada} às ${hora}.`;
@@ -92,13 +97,16 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function abrirImagem(imgElement) {
+    galleryImages = document.querySelectorAll('.galeria-container img');
     currentImageIndex = Array.from(galleryImages).indexOf(imgElement);
     document.getElementById("imagem-popup").src = imgElement.src;
-    document.getElementById("popup-imagem").style.display = "block";
+    document.getElementById("popup-imagem").style.display = "flex"; // Use 'flex' para centralizar
 }
+
 function fecharImagem() {
     document.getElementById("popup-imagem").style.display = "none";
 }
+
 function navegar(direcao) {
     currentImageIndex += direcao;
     if (currentImageIndex < 0) currentImageIndex = galleryImages.length - 1;
@@ -106,9 +114,12 @@ function navegar(direcao) {
     document.getElementById("imagem-popup").src = galleryImages[currentImageIndex].src;
 }
 document.addEventListener("keydown", throttle(function(e) {
-    if (document.getElementById("popup-imagem").style.display === "block") {
+    if (document.getElementById("popup-imagem").style.display === "flex" || document.getElementById("formulario-popup").style.display === "flex") {
         if (e.key === "ArrowLeft") navegar(-1);
         if (e.key === "ArrowRight") navegar(1);
-        if (e.key === "Escape") fecharImagem();
+        if (e.key === "Escape") {
+            fecharImagem();
+            fecharFormulario();
+        }
     }
 }, 50));
