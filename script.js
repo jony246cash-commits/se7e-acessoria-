@@ -1,125 +1,78 @@
-let currentImageIndex = 0;
-let galleryImages = [];
+// Obtém o elemento do ano atual e o atualiza
+document.getElementById('ano-atual').textContent = new Date().getFullYear();
 
-// Função para abrir o formulário de agendamento
-function abrirFormulario() {
-    document.getElementById('formulario-popup').style.display = 'flex'; // Usei 'flex' para o popup centralizar, como no CSS
-}
+// GALERIA
+let currentIndex = 0;
+const galeriaImagens = document.querySelectorAll('.galeria-container img');
 
-// Função para fechar o formulário de agendamento
-function fecharFormulario() {
-    document.getElementById('formulario-popup').style.display = 'none';
-    // Limpar o formulário ao fechar
-    document.getElementById('agendamentoForm').reset();
-}
-
-// Fechar o popup quando clicar fora dele
-window.onclick = function(event) {
-    var popupForm = document.getElementById('formulario-popup');
-    if (event.target === popupForm) {
-        popupForm.style.display = 'none';
-        document.getElementById('agendamentoForm').reset();
-    }
-
-    var popupImage = document.getElementById('popup-imagem');
-    if (event.target === popupImage) {
-        popupImage.style.display = 'none';
-    }
-}
-
-// Função de throttle para melhorar performance
-function throttle(func, limit) {
-    let inThrottle;
-    return function() {
-        const args = arguments;
-        const context = this;
-        if (!inThrottle) {
-            func.apply(context, args);
-            inThrottle = true;
-            setTimeout(() => inThrottle = false, limit);
-        }
-    }
-}
-
-// Fechar popup com tecla ESC (com throttle)
-document.addEventListener('keydown', throttle(function(event) {
-    if (event.key === 'Escape') {
-        fecharFormulario();
-        fecharImagem();
-    }
-}, 100));
-
-// Sistema de agendamento via WhatsApp
-document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar imagens da galeria
-    galleryImages = document.querySelectorAll('.galeria-container img');
-    
-    // Atualizar o ano atual no rodapé
-    document.getElementById('ano-atual').textContent = new Date().getFullYear();
-    
-    // Configurar o formulário de agendamento
-    document.getElementById("agendamentoForm").addEventListener("submit", function(e) {
-        e.preventDefault();
-        
-        // Pega os dados do formulário
-        let nome = document.getElementById("nome").value;
-        let servico = document.getElementById("servico").value;
-        let data = document.getElementById("data").value;
-        let hora = document.getElementById("hora").value;
-        
-        // Validação básica
-        if (!nome || !servico || !data || !hora) {
-            alert('Por favor, preencha todos os campos.');
-            return;
-        }
-        
-        // Formatar a data para o padrão brasileiro
-        let dataFormatada = new Date(data.replace(/-/g, '/')).toLocaleDateString('pt-BR');
-        
-        // Monta a mensagem
-        let mensagem = `Olá, meu nome é ${nome}. Quero agendar o serviço: ${servico} para o dia ${dataFormatada} às ${hora}.`;
-        
-        // Número do WhatsApp
-        let numero = "5569993993568"; // formato internacional sem +
-        
-        // Gera o link do WhatsApp
-        let url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
-        
-        // Abre o WhatsApp
-        window.open(url, "_blank");
-        
-        // Fechar o formulário após enviar
-        fecharFormulario();
-        
-        // Mostrar mensagem de sucesso
-        alert('Redirecionando para o WhatsApp...');
-    });
-});
-
-function abrirImagem(imgElement) {
-    galleryImages = document.querySelectorAll('.galeria-container img');
-    currentImageIndex = Array.from(galleryImages).indexOf(imgElement);
-    document.getElementById("imagem-popup").src = imgElement.src;
-    document.getElementById("popup-imagem").style.display = "flex"; // Use 'flex' para centralizar
+function abrirImagem(element) {
+    const imgPopup = document.getElementById('imagem-popup');
+    const popup = document.getElementById('popup-imagem');
+    
+    imgPopup.src = element.src;
+    popup.style.display = 'flex';
+    
+    // Encontra o índice da imagem clicada
+    galeriaImagens.forEach((img, index) => {
+        if (img === element) {
+            currentIndex = index;
+        }
+    });
 }
 
 function fecharImagem() {
-    document.getElementById("popup-imagem").style.display = "none";
+    document.getElementById('popup-imagem').style.display = 'none';
 }
 
-function navegar(direcao) {
-    currentImageIndex += direcao;
-    if (currentImageIndex < 0) currentImageIndex = galleryImages.length - 1;
-    if (currentImageIndex >= galleryImages.length) currentImageIndex = 0;
-    document.getElementById("imagem-popup").src = galleryImages[currentImageIndex].src;
+function navegar(direction) {
+    currentIndex += direction;
+    
+    if (currentIndex < 0) {
+        currentIndex = galeriaImagens.length - 1;
+    } else if (currentIndex >= galeriaImagens.length) {
+        currentIndex = 0;
+    }
+    
+    const newImageSrc = galeriaImagens[currentIndex].src;
+    document.getElementById('imagem-popup').src = newImageSrc;
 }
-document.addEventListener("keydown", throttle(function(e) {
-    if (document.getElementById("popup-imagem").style.display === "flex" || document.getElementById("formulario-popup").style.display === "flex") {
-        if (e.key === "ArrowLeft") navegar(-1);
-        if (e.key === "ArrowRight") navegar(1);
-        if (e.key === "Escape") {
-            fecharImagem();
-            fecharFormulario();
-        }
-    }
-}, 50));
+
+// FORMULÁRIO
+function abrirFormulario() {
+    document.getElementById('formulario-popup').style.display = 'flex';
+}
+
+function fecharFormulario() {
+    document.getElementById('formulario-popup').style.display = 'none';
+}
+
+// Lógica de envio do formulário para o WhatsApp
+document.getElementById('agendamentoForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const nome = document.getElementById('nome').value;
+    const servico = document.getElementById('servico').value;
+    const data = document.getElementById('data').value;
+    const hora = document.getElementById('hora').value;
+
+    const mensagem = `Olá, gostaria de agendar uma ${servico} para o dia ${data} às ${hora}. Meu nome é ${nome}.`;
+    const url = `https://wa.me/556993993568?text=${encodeURIComponent(mensagem)}`;
+
+    window.open(url, '_blank');
+
+    fecharFormulario();
+});
+
+// Fecha o popup ao clicar fora
+window.onclick = function(event) {
+    const popupImagem = document.getElementById('popup-imagem');
+    const popupFormulario = document.getElementById('formulario-popup');
+    
+    if (event.target === popupImagem) {
+        popupImagem.style.display = "none";
+    }
+    
+    if (event.target === popupFormulario) {
+        popupFormulario.style.display = "none";
+    }
+}
