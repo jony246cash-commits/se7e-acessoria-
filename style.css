@@ -611,4 +611,8 @@ nav a:hover {
     .footer-section {
         text-align: center;
     }
+}/* Ajuste o tamanho dos logos do WhatsApp e Instagram */
+.float-btn img {
+    width: 40px;
+    height: 40px;
 }
