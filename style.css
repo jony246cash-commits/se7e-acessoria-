@@ -1,4 +1,12 @@
 
+/* Importação da fonte personalizada */
+@font-face {
+    font-family: 'Warm Winter';
+    src: url('warm_winter/Warm Winter.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
     font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
@@ -129,15 +137,16 @@ html {
     }
 }
 
-/* Cabeçalho Moderno com Degradê Vertical */
+/* Cabeçalho Rosa Vintage */
 .modern-header {
-    background: linear-gradient(180deg, #1a2332 0%, #2c3e50 30%, #34495e 60%, #e67e22 85%, #fa8072 100%);
-    min-height: 100vh;
+    background: linear-gradient(135deg, #d4a574 0%, #e8b4cb 25%, #f4c2c2 50%, #e8b4cb 75%, #d4a574 100%);
+    min-height: 30vh;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
+    padding: 2rem 0;
 }
 
 .modern-header::before {
@@ -147,9 +156,13 @@ html {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, rgba(26,35,50,0.9) 0%, rgba(44,62,80,0.8) 30%, rgba(52,73,94,0.7) 60%, rgba(230,126,34,0.8) 85%, rgba(250,128,114,0.9) 100%);
+    background: radial-gradient(circle at 20% 30%, rgba(184,134,11,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(218,165,32,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(255,215,0,0.05) 0%, transparent 50%);
     pointer-events: none;
 }
+
+
 
 .header-content {
     text-align: center;
@@ -161,20 +174,122 @@ html {
 }
 
 .logo-container {
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
     animation: fadeInUp 1s ease-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .main-logo {
-    max-width: 400px;
+    max-width: 120px;
     width: 100%;
     height: auto;
-    filter: drop-shadow(0 8px 25px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 4px 15px rgba(0,0,0,0.3));
     transition: transform 0.3s ease;
 }
 
 .main-logo:hover {
     transform: scale(1.05);
+}
+
+.brand-text {
+    font-family: 'Warm Winter', cursive;
+    font-size: 3rem;
+    font-weight: 400;
+    color: #FFD700;
+    position: relative;
+    margin: 0;
+    letter-spacing: 0.12em;
+    line-height: 1;
+}
+
+.brand-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+}
+
+.brand-subtitle {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #ffffff;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+    margin: 0;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.85;
+}
+
+
+
+@keyframes goldShimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+
+
+
+
+/* Responsividade para o header */
+@media (max-width: 768px) {
+    .modern-header {
+        min-height: 25vh;
+        padding: 1.5rem 0;
+    }
+    
+    .logo-container {
+        flex-direction: row;
+        gap: 1rem;
+        align-items: center;
+    }
+    
+    .brand-text {
+        font-size: 2.4rem;
+        font-weight: normal;
+    }
+    
+    .brand-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    .main-logo {
+        max-width: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modern-header {
+        min-height: 20vh;
+        padding: 1rem 0;
+    }
+    
+    .brand-text {
+        font-size: 2rem;
+        font-weight: normal;
+    }
+    
+    .brand-subtitle {
+        font-size: 0.7rem;
+    }
+    
+    .main-logo {
+        max-width: 80px;
+    }
+    
+    .header-content {
+        padding: 0.5rem;
+    }
+    
+    .logo-container {
+        gap: 0.8rem;
+        flex-direction: row;
+    }
 }
 
 .header-nav {
@@ -1097,7 +1212,34 @@ p {
 
 /* Media Queries para Responsividade */
 @media screen and (max-width: 768px) {
+    /* Header responsivo */
+    .header-content {
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 1rem;
+    }
+    
     /* Navegação otimizada para mobile */
+    .header-nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.8rem;
+        width: 100%;
+        padding: 0;
+    }
+    
+    .nav-link {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 1 auto;
+        white-space: nowrap;
+    }
+    
     nav {
         display: flex;
         flex-wrap: wrap;
@@ -1256,11 +1398,38 @@ p {
         padding: 1rem 0.5rem;
     }
     
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0.5rem;
+    }
+    
     .banner-logo {
         max-height: 120px;
     }
     
     /* Navegação ultra-compacta */
+    .header-nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0;
+    }
+    
+    .nav-link {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 1 auto;
+        white-space: nowrap;
+        margin: 2px;
+    }
+    
     nav {
         padding: 0.8rem 0.5rem;
     }
