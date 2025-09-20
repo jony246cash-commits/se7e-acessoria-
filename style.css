@@ -226,3 +226,24 @@ nav a:hover {
     color: var(--text-light);
     border: none;
     padding: 12px
+  /* EFEITO DE TEXTO PISCA-PISCA */
+.logo-text {
+    /* Define a cor dourada */
+    color: #FFD700;
+    font-size: 3rem;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    animation: pisca-pisca 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes pisca-pisca {
+    from {
+        /* Brilho inicial */
+        text-shadow: 0 0 5px #FFD700, 0 0 10px #FFD700, 0 0 15px #FFD700;
+    }
+    to {
+        /* Brilho máximo */
+        text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFD700, 0 0 40px #FFD700;
+    }
+}
