@@ -247,3 +247,8 @@ nav a:hover {
         text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFD700, 0 0 40px #FFD700;
     }
 }
+/* Correção do tamanho dos logos do WhatsApp e Instagram */
+.btn-logo {
+    width: 40px; /* Você pode ajustar este valor */
+    height: auto;
+}
