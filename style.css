@@ -225,30 +225,390 @@ nav a:hover {
     background-color: var(--primary-color);
     color: var(--text-light);
     border: none;
-    padding: 12px
-  /* EFEITO DE TEXTO PISCA-PISCA */
-.logo-text {
-    /* Define a cor dourada */
-    color: #FFD700;
-    font-size: 3rem;
-    text-align: center;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    animation: pisca-pisca 1.5s infinite alternate ease-in-out;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    box-shadow: var(--shadow-light);
 }
 
-@keyframes pisca-pisca {
-    from {
-        /* Brilho inicial */
-        text-shadow: 0 0 5px #FFD700, 0 0 10px #FFD700, 0 0 15px #FFD700;
-    }
-    to {
-        /* Brilho máximo */
-        text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFD700, 0 0 40px #FFD700;
-    }
+.servico-card button:hover {
+    transform: translateY(-2px);
+    background-color: var(--secondary-color);
+    box-shadow: 0 6px 20px rgba(93,93,255,0.4);
 }
-/* Correção do tamanho dos logos do WhatsApp e Instagram */
-.btn-logo {
-    width: 40px; /* Você pode ajustar este valor */
+
+/* ===== 📝 DEPOIMENTOS ===== */
+.depoimentos-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
+.depoimento-card {
+    background-color: var(--text-light);
+    padding: var(--spacing-md);
+    border-radius: 15px;
+    width: 300px;
+    box-shadow: var(--shadow-light);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    text-align: left;
+}
+
+.depoimento-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-dark);
+}
+
+.depoimento-texto {
+    font-style: italic;
+    margin-bottom: var(--spacing-sm);
+}
+
+.depoimento-autor {
+    text-align: right;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+/* ===== 🖼️ GALERIA ===== */
+.galeria-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-sm);
+    justify-items: center;
+}
+
+.galeria-container img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    box-shadow: var(--shadow-light);
+}
+
+.galeria-container img:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-dark);
+}
+
+/* Popup para a imagem da galeria */
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.9);
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-img-container {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#imagem-popup {
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 10px;
+}
+
+.fechar {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.fechar:hover,
+.fechar:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+}
+
+/* Formulário de Agendamento */
+.form-popup-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.form-popup {
+    background-color: var(--text-light);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+}
+
+.form-popup h2 {
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.form-popup label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--text-secondary);
+}
+
+.form-popup input[type="text"],
+.form-popup input[type="date"],
+.form-popup input[type="time"],
+.form-popup select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-popup input:focus,
+.form-popup select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.form-popup button[type="submit"] {
+    width: 100%;
+    padding: 15px;
+    background-color: #25D366; /* Cor do WhatsApp */
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.form-popup button[type="submit"]:hover {
+    background-color: #1DA851;
+}
+
+/* Estilo para os botões flutuantes */
+.floating-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.float-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.float-btn:hover {
+    transform: scale(1.1);
+}
+
+.float-btn img {
+    width: 100%;
     height: auto;
+    border-radius: 50%;
+}
+
+.whatsapp {
+    background-color: #25D366;
+}
+
+.instagram {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+/* ===== 🦶 FOOTER ===== */
+.footer-elaborado {
+    background-color: var(--dark-bg);
+    color: var(--text-light);
+    padding: var(--spacing-lg) var(--spacing-md);
+    font-size: 0.9rem;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section h3 {
+    color: var(--text-light);
+    margin-bottom: var(--spacing-sm);
+}
+
+.footer-section p {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-social {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+}
+
+.social-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.social-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.social-icon {
+    width: 70%;
+    height: auto;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.contact-item span {
+    font-size: 1.2rem;
+    color: var(--accent-color);
+}
+
+.contact-item p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.services-list {
+    list-style-type: none;
+}
+
+.services-list li {
+    margin-bottom: 5px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.schedule p {
+    margin-bottom: 5px;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    text-align: center;
+}
+
+.footer-bottom-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-bottom-content p {
+    margin: 5px 0;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.developer {
+    font-style: italic;
+}
+
+/* ===== 📱 RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+    .header-container,
+    .conhecanos-container,
+    .servicos-container,
+    .depoimentos-container,
+    .footer-container {
+        flex-direction: column;
+    }
+
+    nav a {
+        margin: 0 5px;
+    }
+    .header-subtitle {
+        font-size: 1.2rem;
+    }
+    h2 {
+        font-size: 2rem;
+    }
+
+    .galeria-container {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-section {
+        text-align: center;
+    }
 }
