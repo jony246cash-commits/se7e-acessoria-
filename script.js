@@ -1,78 +1,197 @@
-// Obtém o elemento do ano atual e o atualiza
-document.getElementById('ano-atual').textContent = new Date().getFullYear();
 
-// GALERIA
-let currentIndex = 0;
-const galeriaImagens = document.querySelectorAll('.galeria-container img');
+let currentImageIndex = 0;
+let galleryImages = [];
 
-function abrirImagem(element) {
-    const imgPopup = document.getElementById('imagem-popup');
-    const popup = document.getElementById('popup-imagem');
-    
-    imgPopup.src = element.src;
-    popup.style.display = 'flex';
-    
-    // Encontra o índice da imagem clicada
-    galeriaImagens.forEach((img, index) => {
-        if (img === element) {
-            currentIndex = index;
-        }
-    });
-}
-
-function fecharImagem() {
-    document.getElementById('popup-imagem').style.display = 'none';
-}
-
-function navegar(direction) {
-    currentIndex += direction;
-    
-    if (currentIndex < 0) {
-        currentIndex = galeriaImagens.length - 1;
-    } else if (currentIndex >= galeriaImagens.length) {
-        currentIndex = 0;
-    }
-    
-    const newImageSrc = galeriaImagens[currentIndex].src;
-    document.getElementById('imagem-popup').src = newImageSrc;
-}
-
-// FORMULÁRIO
+// Função para abrir o formulário de agendamento
 function abrirFormulario() {
-    document.getElementById('formulario-popup').style.display = 'flex';
+    document.getElementById('formulario-popup').style.display = 'block';
 }
 
+// Função para fechar o formulário de agendamento
 function fecharFormulario() {
-    document.getElementById('formulario-popup').style.display = 'none';
+    document.getElementById('formulario-popup').style.display = 'none';
+    // Limpar o formulário ao fechar
+    document.getElementById('agendamentoForm').reset();
 }
 
-// Lógica de envio do formulário para o WhatsApp
-document.getElementById('agendamentoForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+// Fechar o popup quando clicar fora dele
+window.onclick = function(event) {
+    var popup = document.getElementById('formulario-popup');
+    if (event.target == popup) {
+        popup.style.display = 'none';
+        document.getElementById('agendamentoForm').reset();
+    }
+}
 
-    const nome = document.getElementById('nome').value;
-    const servico = document.getElementById('servico').value;
-    const data = document.getElementById('data').value;
-    const hora = document.getElementById('hora').value;
+// Função de throttle para melhorar performance
+function throttle(func, limit) {
+    let inThrottle;
+    return function() {
+        const args = arguments;
+        const context = this;
+        if (!inThrottle) {
+            func.apply(context, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    }
+}
 
-    const mensagem = `Olá, gostaria de agendar uma ${servico} para o dia ${data} às ${hora}. Meu nome é ${nome}.`;
-    const url = `https://wa.me/556993993568?text=${encodeURIComponent(mensagem)}`;
+// Fechar popup com tecla ESC (com throttle)
+document.addEventListener('keydown', throttle(function(event) {
+    if (event.key === 'Escape') {
+        fecharFormulario();
+    }
+}, 100));
 
-    window.open(url, '_blank');
-
-    fecharFormulario();
+// Sistema de agendamento via WhatsApp
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar imagens da galeria
+    galleryImages = document.querySelectorAll('.galeria-container img');
+    
+    // Atualizar o ano atual no rodapé
+    document.getElementById('ano-atual').textContent = new Date().getFullYear();
+    
+    // Inicializar animações de rolagem
+    initScrollAnimations();
+    
+    // Adicionar classes de animação aos elementos
+    addAnimationClasses();
+    
+    // Configurar o formulário de agendamento
+    document.getElementById("agendamentoForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        
+        // Pega os dados do formulário
+        let nome = document.getElementById("nome").value;
+        let servico = document.getElementById("servico").value;
+        let data = document.getElementById("data").value;
+        let hora = document.getElementById("hora").value;
+        
+        // Validação básica
+        if (!nome || !servico || !data || !hora) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
+        
+        // Formatar a data para o padrão brasileiro
+        let dataFormatada = new Date(data).toLocaleDateString('pt-BR');
+        
+        // Monta a mensagem
+        let mensagem = `Olá, meu nome é ${nome}. Quero agendar o serviço: ${servico} para o dia ${dataFormatada} às ${hora}.`;
+        
+        // Número do WhatsApp
+        let numero = "5569992720204"; // formato internacional sem +
+        
+        // Gera o link do WhatsApp
+        let url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+        
+        // Abre o WhatsApp
+        window.open(url, "_blank");
+        
+        // Fechar o formulário após enviar
+        fecharFormulario();
+        
+        // Mostrar mensagem de sucesso
+        alert('Redirecionando para o WhatsApp...');
+    });
 });
 
-// Fecha o popup ao clicar fora
-window.onclick = function(event) {
-    const popupImagem = document.getElementById('popup-imagem');
-    const popupFormulario = document.getElementById('formulario-popup');
-    
-    if (event.target === popupImagem) {
-        popupImagem.style.display = "none";
-    }
-    
-    if (event.target === popupFormulario) {
-        popupFormulario.style.display = "none";
-    }
+function abrirImagem(imgElement) {
+    currentImageIndex = Array.from(galleryImages).indexOf(imgElement);
+    document.getElementById("imagem-popup").src = imgElement.src;
+    document.getElementById("popup-imagem").style.display = "block";
+}
+function fecharImagem() {
+    document.getElementById("popup-imagem").style.display = "none";
+}
+function navegar(direcao) {
+    currentImageIndex += direcao;
+    if (currentImageIndex < 0) currentImageIndex = galleryImages.length - 1;
+    if (currentImageIndex >= galleryImages.length) currentImageIndex = 0;
+    document.getElementById("imagem-popup").src = galleryImages[currentImageIndex].src;
+}
+document.addEventListener("keydown", throttle(function(e) {
+    if (document.getElementById("popup-imagem").style.display === "block") {
+        if (e.key === "ArrowLeft") navegar(-1);
+        if (e.key === "ArrowRight") navegar(1);
+        if (e.key === "Escape") fecharImagem();
+    }
+}, 50));
+
+// Funções de animação de rolagem
+function initScrollAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+                
+                // Animar cards com delay
+                if (entry.target.classList.contains('stagger-children')) {
+                    const children = entry.target.children;
+                    Array.from(children).forEach((child, index) => {
+                        setTimeout(() => {
+                            child.classList.add('animate');
+                        }, index * 150);
+                    });
+                }
+            }
+        });
+    }, observerOptions);
+    
+    // Observar elementos com animação
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        observer.observe(el);
+    });
+}
+
+function addAnimationClasses() {
+    // Adicionar classes de animação aos elementos
+    const sections = document.querySelectorAll('section');
+    sections.forEach((section, index) => {
+        section.classList.add('animate-on-scroll');
+        
+        if (index % 2 === 0) {
+            section.classList.add('fade-up');
+        } else {
+            section.classList.add('fade-left');
+        }
+    });
+    
+    // Animar cards de serviços
+    const servicosContainer = document.querySelector('.servicos-container');
+    if (servicosContainer) {
+        servicosContainer.classList.add('animate-on-scroll', 'stagger-children');
+        const serviceCards = servicosContainer.querySelectorAll('.servico-card');
+        serviceCards.forEach(card => {
+            card.classList.add('animate-on-scroll', 'scale-in');
+        });
+    }
+    
+    // Animar cards de depoimentos
+    const depoimentosContainer = document.querySelector('.depoimentos-container');
+    if (depoimentosContainer) {
+        depoimentosContainer.classList.add('animate-on-scroll', 'stagger-children');
+        const depoimentoCards = depoimentosContainer.querySelectorAll('.depoimento-card');
+        depoimentoCards.forEach(card => {
+            card.classList.add('animate-on-scroll', 'fade-up');
+        });
+    }
+    
+    // Animar foto da proprietária
+    const proprietariaFoto = document.querySelector('.proprietaria-foto');
+    if (proprietariaFoto) {
+        proprietariaFoto.classList.add('animate-on-scroll', 'scale-in');
+    }
+    
+    // Animar conteúdo da seção conheca-nos
+    const conhecanosContent = document.querySelector('.conhecanos-content');
+    if (conhecanosContent) {
+        conhecanosContent.classList.add('animate-on-scroll', 'fade-right');
+    }
 }
